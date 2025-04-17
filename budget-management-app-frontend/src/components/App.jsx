@@ -1,28 +1,22 @@
 import React, { useState } from "react";
+import LoggingForm from "./LoggingForm";
+import CreateAccountForm from "./CreateAccountForm";
 
 function App() {
-  const [name, setName] = useState("");
-  const [headingName, setHeadingName] = useState("");
+  const [userIsCreated, setUserIsCreated] = useState(true);
 
-  function handleClick() {
-    setHeadingName(name);
+  function createUser() {
+    setUserIsCreated(false);
   }
 
-  function handleChange(event) {
-    setName(event.target.value);
-  }
   return (
     <div className="container">
-      <h1>Hello {headingName}</h1>
-      <form onSubmit={handleClick}>
-        <input
-          onChange={handleChange}
-          type="text"
-          placeholder="What's your name?"
-          // value={name}
-        />
-        <button type="submit">Submit</button>
-      </form>
+      <h1>Hello ! </h1>
+      {userIsCreated ? (
+        <LoggingForm onCreate={createUser} />
+      ) : (
+        <CreateAccountForm />
+      )}
     </div>
   );
 }
