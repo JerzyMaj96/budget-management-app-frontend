@@ -7,22 +7,27 @@ function LoggingForm(props) {
     setUserId(event.target.value);
   }
 
+  function handleLogin(event) {
+    event.preventDefault();
+    if (userId.trim() !== "") {
+      props.onLogin(userId);
+    }
+  }
+
   function handleCreate() {
     props.onCreate();
   }
 
   return (
-    <form>
+    <form onSubmit={handleLogin}>
       <input
         onChange={handleChange}
         name="userId"
         placeholder="User ID"
         value={userId}
       />
-      <button type="submit" style={{ cursor: "pointer" }}>
-        Log in
-      </button>
-      <p onClick={handleCreate} style={{ cursor: "pointer", color: "white" }}>
+      <button type="submit">Log in</button>
+      <p onClick={handleCreate} style={{ cursor: "pointer" }}>
         I am not a user yet !
       </p>
     </form>
