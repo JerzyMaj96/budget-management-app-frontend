@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 
 function CreateAccountForm(props) {
-  const [user, setUserName] = useState({
+  const [user, setUser] = useState({
     userName: "",
     netSalary: "",
   });
 
   function handleChange(event) {
     const { value, name } = event.target;
-    setUserName((prevValue) => {
+    setUser((prevValue) => {
       return { ...prevValue, [name]: value };
     });
   }

@@ -111,3 +111,13 @@ button {
     transform: rotate(360deg);
   }
 }
+
+.monthly-costs-inner-button {
+  margin-top: 10px;
+  background-color: #f6ca52;
+  color: green;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: bold;
+  width: 120px;
+}

@@ -45,6 +45,9 @@ function MonthlyCostsPage({ userId }) {
     setIsMonthlyCostsForm(isFormVisible);
   }
 
+  function showAnalysis() {}
+  // TO FINISH
+
   return (
     <div>
       {loading && <div className="loader"></div>}
@@ -111,6 +114,10 @@ function MonthlyCostsPage({ userId }) {
             <li>Car Operation: {selectedCosts.carOperatingCosts} zł</li>
             <li>Created At: {formatDate(selectedCosts.createDate)}</li>
           </ul>
+          {/* TO FINISH */}
+          <button className="monthly-costs-inner-button" onClick={showAnalysis}>
+            Show analysis
+          </button>
         </div>
       )}
     </div>
