@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CreateMonthlyCostsForm from "./MonthlyCostsPage-components/CreateMonthlyCostsForm";
+import { useNavigate } from "react-router-dom";
 
 function MonthlyCostsPage({ userId }) {
   const [monthlyCostsList, setMonthlyCostsList] = useState([]);
@@ -45,8 +46,12 @@ function MonthlyCostsPage({ userId }) {
     setIsMonthlyCostsForm(isFormVisible);
   }
 
-  function showAnalysis() {}
-  // TO FINISH
+  const navigate = useNavigate();
+
+  function showAnalysis(event) {
+    event.preventDefault;
+    navigate("/analysis", { state: { selectedCosts } });
+  }
 
   return (
     <div>
@@ -109,12 +114,29 @@ function MonthlyCostsPage({ userId }) {
             <li>Food Costs: {selectedCosts.foodCosts} zł</li>
             <li>Electricity: {selectedCosts.currentElectricityBill} zł</li>
             <li>Gas: {selectedCosts.currentGasBill} zł</li>
-            <li>Car Service: {selectedCosts.totalCarServiceCosts} zł</li>
-            <li>Car Insurance: {selectedCosts.carInsuranceCosts} zł</li>
-            <li>Car Operation: {selectedCosts.carOperatingCosts} zł</li>
+            <li>
+              Car Service:{" "}
+              {selectedCosts.totalCarServiceCosts === null
+                ? 0
+                : selectedCosts.totalCarServiceCosts}{" "}
+              zł
+            </li>
+            <li>
+              Car Insurance:{" "}
+              {selectedCosts.carInsuranceCosts === null
+                ? 0
+                : selectedCosts.carInsuranceCosts}{" "}
+              zł
+            </li>
+            <li>
+              Car Operation:{" "}
+              {selectedCosts.carOperatingCosts === null
+                ? 0
+                : selectedCosts.carOperatingCosts}{" "}
+              zł
+            </li>
             <li>Created At: {formatDate(selectedCosts.createDate)}</li>
           </ul>
-          {/* TO FINISH */}
           <button className="monthly-costs-inner-button" onClick={showAnalysis}>
             Show analysis
           </button>

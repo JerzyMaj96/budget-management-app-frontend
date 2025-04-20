@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoggingForm from "./LoggingForm";
 import CreateAccountForm from "./CreateAccountForm";
 import Header from "./Header";
 import MonthlyCostsPage from "./MonthlyCostsPage";
+import AnalysisPage from "./AnalysisPage";
 
 function App() {
   const [userIsCreated, setUserIsCreated] = useState(true);
@@ -17,21 +19,31 @@ function App() {
   }
 
   return (
-    <div>
+    <Router>
       <Header />
       <div className="container">
-        {userId ? (
-          <MonthlyCostsPage userId={userId} />
-        ) : userIsCreated ? (
-          <div>
-            <h1>Hello ! </h1>
-            <LoggingForm onLogin={handleLogin} onCreate={createUser} />
-          </div>
-        ) : (
-          <CreateAccountForm onBackToLogin={() => setUserIsCreated(true)} />
-        )}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              userId ? (
+                <MonthlyCostsPage userId={userId} />
+              ) : userIsCreated ? (
+                <div>
+                  <h1>Hello ! </h1>
+                  <LoggingForm onLogin={handleLogin} onCreate={createUser} />
+                </div>
+              ) : (
+                <CreateAccountForm
+                  onBackToLogin={() => setUserIsCreated(true)}
+                />
+              )
+            }
+          />
+          <Route path="/analysis" element={<AnalysisPage />} />
+        </Routes>
       </div>
-    </div>
+    </Router>
   );
 }
 
