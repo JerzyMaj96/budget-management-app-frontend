@@ -34,7 +34,10 @@ function MonthlyCostsPage({ userId }) {
 
   function formatDate(dateString) {
     const date = new Date(dateString);
-    return date.toLocaleDateString();
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
   }
 
   function getMonthlyCostsForm(event) {
@@ -49,8 +52,11 @@ function MonthlyCostsPage({ userId }) {
   const navigate = useNavigate();
 
   function showAnalysis(event) {
-    event.preventDefault;
-    navigate("/analysis", { state: { selectedCosts } });
+    event.preventDefault();
+    const date = new Date(selectedCosts.createDate);
+    const month = date.getMonth() + 1;
+    console.log("Navigating with data:", { selectedCosts, userId, month });
+    navigate("/analysis", { state: { selectedCosts, userId, month } });
   }
 
   return (
