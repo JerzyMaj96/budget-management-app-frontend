@@ -99,7 +99,7 @@ const AnalysisPage = () => {
   }
 
   if (!costsSummary || !selectedCosts) {
-    return <div>⏳ Waiting for data...</div>;
+    return <div>Waiting for data...</div>;
   }
 
   return <SummaryComponent costs={selectedCosts} summary={costsSummary} />;

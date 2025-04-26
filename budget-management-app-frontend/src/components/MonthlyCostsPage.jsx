@@ -55,7 +55,6 @@ function MonthlyCostsPage({ userId }) {
     event.preventDefault();
     const date = new Date(selectedCosts.createDate);
     const month = date.getMonth() + 1;
-    console.log("Navigating with data:", { selectedCosts, userId, month });
     navigate("/analysis", { state: { selectedCosts, userId, month } });
   }
 
@@ -141,7 +140,7 @@ function MonthlyCostsPage({ userId }) {
                 : selectedCosts.carOperatingCosts}{" "}
               zł
             </li>
-            <li>Created At: {formatDate(selectedCosts.createDate)}</li>
+            <li>Created On : {formatDate(selectedCosts.createDate)}</li>
           </ul>
           <button className="monthly-costs-inner-button" onClick={showAnalysis}>
             Show analysis

@@ -126,6 +126,11 @@ const SummaryComponent = ({ costs, summary }) => {
             <Box sx={{ flex: 1, minWidth: 300, height: 300 }}>
               <Pie data={data} options={options} />
             </Box>
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+              <button className="monthly-costs-inner-button">
+                Get a financial advice
+              </button>
+            </Box>
           </Box>
         </CardContent>
       </Card>
