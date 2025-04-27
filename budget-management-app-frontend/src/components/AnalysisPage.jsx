@@ -91,7 +91,7 @@ const AnalysisPage = () => {
   }, [userId, month, baseUrl]);
 
   if (isLoading) {
-    return <div className="loader">Loading summary...</div>;
+    return <div className="loader"></div>;
   }
 
   if (error) {

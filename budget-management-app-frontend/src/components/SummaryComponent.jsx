@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, Typography, Box } from "@mui/material";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import GPTAdvice from "./GPTAdvice";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const SummaryComponent = ({ costs, summary }) => {
+  const [isAdvice, setIsAdvice] = useState(false);
   const labels = ["Rent", "Food", "Electricity", "Gas"];
   const dataValues = [
     costs.rent,
@@ -59,6 +61,11 @@ const SummaryComponent = ({ costs, summary }) => {
     },
     maintainAspectRatio: false,
   };
+
+  function getAdvice(event) {
+    event.preventDefault;
+    setIsAdvice(true);
+  }
 
   return (
     <div style={{ margin: "40px auto", maxWidth: "900px" }}>
@@ -127,10 +134,18 @@ const SummaryComponent = ({ costs, summary }) => {
               <Pie data={data} options={options} />
             </Box>
             <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-              <button className="monthly-costs-inner-button">
+              <button
+                className="monthly-costs-inner-button"
+                onClick={getAdvice}
+              >
                 Get a financial advice
               </button>
             </Box>
+            {isAdvice && (
+              <Box>
+                <GPTAdvice userId={costs.userId} month={costs.month} />
+              </Box>
+            )}
           </Box>
         </CardContent>
       </Card>
