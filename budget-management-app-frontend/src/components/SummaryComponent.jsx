@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { Card, CardContent, Typography, Box } from "@mui/material";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import GPTAdvice from "./GPTAdvice";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const SummaryComponent = ({ costs, summary }) => {
-  const [isAdvice, setIsAdvice] = useState(false);
+  const [adviceText, setAdviceText] = useState(null);
+  const [adviceError, setAdviceError] = useState(null);
+  const [adviceLoading, setAdviceLoading] = useState(false);
+
   const labels = ["Rent", "Food", "Electricity", "Gas"];
   const dataValues = [
     costs.rent,
@@ -62,9 +64,44 @@ const SummaryComponent = ({ costs, summary }) => {
     maintainAspectRatio: false,
   };
 
-  function getAdvice(event) {
-    event.preventDefault;
-    setIsAdvice(true);
+  async function getAdvice(event) {
+    event.preventDefault();
+    setAdviceLoading(true);
+    setAdviceError(null);
+
+    if (!costs.userId || !costs.month) {
+      setAdviceError("Missing userId or month.");
+      setAdviceLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/budget-management/users/${costs.userId}/monthly_costs/advice?month=${costs.month}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to get an advice.");
+      }
+
+      const json = await response.json();
+      const advice = json.choices?.[0]?.message?.content;
+
+      if (!advice) {
+        throw new Error("Advice content missing in the response.");
+      }
+
+      setAdviceText(advice);
+    } catch (error) {
+      console.error("Error fetching advice:", error);
+      setAdviceError(error.message);
+    } finally {
+      setAdviceLoading(false);
+    }
   }
 
   return (
@@ -133,20 +170,37 @@ const SummaryComponent = ({ costs, summary }) => {
             <Box sx={{ flex: 1, minWidth: 300, height: 300 }}>
               <Pie data={data} options={options} />
             </Box>
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-              <button
-                className="monthly-costs-inner-button"
-                onClick={getAdvice}
-              >
-                Get a financial advice
-              </button>
-            </Box>
-            {isAdvice && (
-              <Box>
-                <GPTAdvice userId={costs.userId} month={costs.month} />
-              </Box>
-            )}
           </Box>
+
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+            <button className="monthly-costs-inner-button" onClick={getAdvice}>
+              Get a financial advice
+            </button>
+          </Box>
+
+          {adviceLoading && <div className="loader"></div>}
+
+          {adviceError && (
+            <div style={{ color: "red", marginTop: "10px" }}>
+              Error: {adviceError}
+            </div>
+          )}
+
+          {adviceText && (
+            <Box
+              sx={{
+                mt: 4,
+                p: 2,
+                backgroundColor: "rgba(255,255,255,0.05)",
+                borderRadius: "8px",
+              }}
+            >
+              <h3 style={{ color: "#FFDF88", fontWeight: "bold" }}>
+                Financial Advice:
+              </h3>
+              <p>{adviceText}</p>
+            </Box>
+          )}
         </CardContent>
       </Card>
     </div>

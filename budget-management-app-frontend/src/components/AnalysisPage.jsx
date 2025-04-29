@@ -102,7 +102,13 @@ const AnalysisPage = () => {
     return <div>Waiting for data...</div>;
   }
 
-  return <SummaryComponent costs={selectedCosts} summary={costsSummary} />;
+  const extendedCosts = {
+    ...selectedCosts,
+    userId,
+    month,
+  };
+
+  return <SummaryComponent costs={extendedCosts} summary={costsSummary} />;
 };
 
 export default AnalysisPage;
