@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CreateMonthlyCostsForm from "./MonthlyCostsPage-components/CreateMonthlyCostsForm";
 import { useNavigate } from "react-router-dom";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 
 function MonthlyCostsPage({ userId }) {
   const [monthlyCostsList, setMonthlyCostsList] = useState([]);
@@ -8,6 +9,7 @@ function MonthlyCostsPage({ userId }) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isMonthlyCostsForm, setIsMonthlyCostsForm] = useState(false);
+  const [isCurrentMonth, setIsCurrentMonth] = useState(true);
 
   useEffect(() => {
     fetch(
@@ -58,6 +60,10 @@ function MonthlyCostsPage({ userId }) {
     navigate("/analysis", { state: { selectedCosts, userId, month } });
   }
 
+  function createNewMonthlyCosts(event) {
+    event.preventDefault();
+  }
+
   return (
     <div>
       {loading && <div className="loader"></div>}
@@ -87,7 +93,23 @@ function MonthlyCostsPage({ userId }) {
 
       {!loading && monthlyCostsList.length > 0 && (
         <div>
-          <h2>Monthly Costs</h2>
+          <div
+            style={{ position: "relative", width: "100%", padding: "0 40px" }}
+          >
+            <h2 style={{ textAlign: "center" }}>Monthly Costs</h2>
+            {isCurrentMonth && (
+              <AddBoxIcon
+                onClick={createNewMonthlyCosts}
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                }}
+              />
+            )}
+          </div>
+
           <table className="custom-table">
             <thead>
               <tr>
