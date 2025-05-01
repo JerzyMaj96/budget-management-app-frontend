@@ -9,7 +9,6 @@ function MonthlyCostsPage({ userId }) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isMonthlyCostsForm, setIsMonthlyCostsForm] = useState(false);
-  const [isCurrentMonth, setIsCurrentMonth] = useState(true);
 
   useEffect(() => {
     fetch(
@@ -62,6 +61,7 @@ function MonthlyCostsPage({ userId }) {
 
   function createNewMonthlyCosts(event) {
     event.preventDefault();
+    setIsMonthlyCostsForm(true);
   }
 
   return (
@@ -91,25 +91,43 @@ function MonthlyCostsPage({ userId }) {
         </p>
       )}
 
-      {!loading && monthlyCostsList.length > 0 && (
+      {!isMonthlyCostsForm && !loading && monthlyCostsList.length > 0 && (
         <div>
           <div
-            style={{ position: "relative", width: "100%", padding: "0 40px" }}
+            style={{
+              position: "relative",
+              width: "100%",
+              padding: "0 40px",
+            }}
           >
             <h2 style={{ textAlign: "center" }}>Monthly Costs</h2>
-            {isCurrentMonth && (
-              <AddBoxIcon
-                onClick={createNewMonthlyCosts}
-                style={{
-                  position: "absolute",
-                  right: 0,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                }}
-              />
-            )}
-          </div>
 
+            {monthlyCostsList.length > 0 &&
+              (() => {
+                const lastCost = monthlyCostsList[monthlyCostsList.length - 1];
+                const isSameMonth =
+                  new Date(lastCost.createDate).getMonth() ===
+                    new Date().getMonth() &&
+                  new Date(lastCost.createDate).getFullYear() ===
+                    new Date().getFullYear();
+
+                if (!isSameMonth) {
+                  return (
+                    <AddBoxIcon
+                      onClick={createNewMonthlyCosts}
+                      style={{
+                        position: "absolute",
+                        right: 0,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        cursor: "pointer",
+                      }}
+                    />
+                  );
+                }
+                return null;
+              })()}
+          </div>
           <table className="custom-table">
             <thead>
               <tr>
@@ -167,6 +185,7 @@ function MonthlyCostsPage({ userId }) {
           <button className="monthly-costs-inner-button" onClick={showAnalysis}>
             Show analysis
           </button>
+          <button className="monthly-costs-inner-button">Make changes</button>
         </div>
       )}
     </div>
