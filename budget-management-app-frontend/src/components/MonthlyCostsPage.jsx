@@ -139,7 +139,13 @@ function MonthlyCostsPage({ userId }) {
               {monthlyCostsList.map((cost) => (
                 <tr
                   key={cost.id}
-                  onClick={() => setSelectedCosts(cost)}
+                  onClick={() =>
+                    setSelectedCosts(
+                      selectedCosts && selectedCosts.id === cost.id
+                        ? null
+                        : cost
+                    )
+                  }
                   style={{ cursor: "pointer" }}
                 >
                   <td>{cost.id}</td>
@@ -151,7 +157,7 @@ function MonthlyCostsPage({ userId }) {
         </div>
       )}
 
-      {selectedCosts && (
+      {!isMonthlyCostsForm && selectedCosts && (
         <div className="details-box">
           <h3>Details for Monthly Costs with ID: {selectedCosts.id}</h3>
           <ul>

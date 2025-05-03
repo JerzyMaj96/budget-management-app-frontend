@@ -174,7 +174,7 @@ const SummaryComponent = ({ costs, summary }) => {
 
           <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
             <button className="monthly-costs-inner-button" onClick={getAdvice}>
-              Get a financial advice
+              Get a financial advice from Chat GPT
             </button>
           </Box>
 

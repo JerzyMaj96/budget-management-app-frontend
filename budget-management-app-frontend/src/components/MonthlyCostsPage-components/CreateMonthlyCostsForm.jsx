@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import MonthlyCostsInput from "./MonthlyCostsInput";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
 function CreateMonthlyCostsForm(props) {
   const [monthlyCostsItem, setMonthlyCostsItem] = useState({
@@ -42,11 +43,21 @@ function CreateMonthlyCostsForm(props) {
     }
   }
   return (
-    <form onSubmit={create}>
-      <h1>Monthly Costs</h1>
+    <form onSubmit={create} style={{ position: "relative", padding: "20px" }}>
+      <KeyboardBackspaceIcon
+        onClick={() => props.onBackToMonthlyCostsPage(false)}
+        style={{
+          position: "absolute",
+          top: 10,
+          left: 10,
+          cursor: "pointer",
+          fontSize: "30px",
+        }}
+      />
+      <h1 style={{ textAlign: "center" }}>Monthly Costs</h1>
       {Object.entries(monthlyCostsItem).map(([key, value]) => {
         return (
-          <div>
+          <div key={key}>
             <MonthlyCostsInput
               onChange={handleChange}
               key={key}

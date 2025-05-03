@@ -13,6 +13,11 @@ header {
   display: flex;
   align-items: center;
   gap: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
 
 header h1 {
@@ -32,6 +37,7 @@ body {
   margin: 10% auto;
   padding: 80px 0;
   text-align: center;
+  padding-top: 120px;
 }
 
 .container h1 {
