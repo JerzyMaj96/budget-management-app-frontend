@@ -15,9 +15,10 @@ function CreateMonthlyCostsForm(props) {
 
   function handleChange(event) {
     const { value, name } = event.target;
-    setMonthlyCostsItem((prevValue) => {
-      return { ...prevValue, [name]: value };
-    });
+    setMonthlyCostsItem((prevValue) => ({
+      ...prevValue,
+      [name]: value,
+    }));
   }
 
   async function create(event) {
@@ -32,9 +33,7 @@ function CreateMonthlyCostsForm(props) {
           body: JSON.stringify(monthlyCostsItem),
         }
       );
-      if (!response.ok) {
-        throw new Error(await response.text());
-      }
+      if (!response.ok) throw new Error(await response.text());
 
       alert("Monthly costs created successfully!");
       props.onBackToMonthlyCostsPage(false);
@@ -42,32 +41,24 @@ function CreateMonthlyCostsForm(props) {
       alert("Error creating monthly costs: " + error.message);
     }
   }
+
   return (
-    <form onSubmit={create} style={{ position: "relative", padding: "20px" }}>
+    <form className="monthly-costs-form" onSubmit={create}>
       <KeyboardBackspaceIcon
         onClick={() => props.onBackToMonthlyCostsPage(false)}
-        style={{
-          position: "absolute",
-          top: 10,
-          left: 10,
-          cursor: "pointer",
-          fontSize: "30px",
-        }}
+        className="back-icon"
       />
-      <h1 style={{ textAlign: "center" }}>Monthly Costs</h1>
-      {Object.entries(monthlyCostsItem).map(([key, value]) => {
-        return (
-          <div key={key}>
-            <MonthlyCostsInput
-              onChange={handleChange}
-              key={key}
-              name={key}
-              placeholder={key}
-              value={value}
-            />
-          </div>
-        );
-      })}
+      <h1 className="monthly-costs-heading">Monthly Costs</h1>
+      {Object.entries(monthlyCostsItem).map(([key, value]) => (
+        <div key={key}>
+          <MonthlyCostsInput
+            onChange={handleChange}
+            name={key}
+            placeholder={key}
+            value={value}
+          />
+        </div>
+      ))}
       <button type="submit">Create</button>
     </form>
   );

@@ -204,3 +204,153 @@ button:active,
 .add-icon:hover {
   transform: scale(1.2);
 }
+
+/* ------------------------------------------------------------ Monthly Costs Form */
+
+.monthly-costs-form {
+  position: relative;
+  padding: 20px;
+}
+
+.back-icon {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  cursor: pointer;
+  font-size: 30px;
+}
+
+.monthly-costs-heading {
+  text-align: center;
+}
+
+/* --------------------------------------------------------- Analysis Page */
+
+.error-text {
+  color: red;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.loading-text {
+  color: white;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* --------------------------------------------------------- Summary Componet */
+
+.summary-container {
+  margin: 40px auto;
+  max-width: 900px;
+  position: relative;
+  padding: 20px;
+}
+
+.summary-title {
+  margin-bottom: 24px;
+  text-align: center;
+  color: white;
+}
+
+.back-icon {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+  font-size: 30px;
+  color: white;
+}
+
+.summary-card {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+  border-radius: 16px !important;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+.summary-content-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .summary-content-box {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.summary-info {
+  flex: 1;
+}
+
+.summary-chart {
+  flex: 1;
+  min-width: 300px;
+  height: 300px;
+}
+
+.summary-advice-btn {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.summary-error {
+  color: red;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.summary-advice-box {
+  margin-top: 32px;
+  padding: 16px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.summary-advice-title {
+  color: #ffdf88;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* ------------------------------------------------------------ Forms */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.form-input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.form-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.form-button:hover {
+  background-color: #45a049;
+}
+
+.form-link {
+  text-align: center;
+  color: wheat;
+  cursor: pointer;
+  text-decoration: underline;
+}

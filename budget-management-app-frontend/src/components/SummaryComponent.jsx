@@ -88,16 +88,12 @@ const SummaryComponent = ({ costs, summary }) => {
         }
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to get an advice.");
-      }
+      if (!response.ok) throw new Error("Failed to get an advice.");
 
       const json = await response.json();
       const advice = json.choices?.[0]?.message?.content;
 
-      if (!advice) {
-        throw new Error("Advice content missing in the response.");
-      }
+      if (!advice) throw new Error("Advice content missing in the response.");
 
       setAdviceText(advice);
     } catch (error) {
@@ -109,46 +105,19 @@ const SummaryComponent = ({ costs, summary }) => {
   }
 
   return (
-    <div
-      style={{
-        margin: "40px auto",
-        maxWidth: "900px",
-        position: "relative",
-        padding: "20px",
-      }}
-    >
+    <div className="summary-container">
       <KeyboardBackspaceIcon
         onClick={() => navigate(-1)}
-        style={{
-          position: "absolute",
-          top: 20,
-          left: 20,
-          cursor: "pointer",
-          fontSize: "30px",
-        }}
+        className="back-icon"
       />
-      <Typography variant="h4" sx={{ mb: 3 }}>
+      <Typography variant="h4" className="summary-title">
         Analysis for Monthly Costs ID: {costs.id}
       </Typography>
 
-      <Card
-        sx={{
-          backgroundColor: "rgba(255,255,255,0.1)",
-          color: "white",
-          borderRadius: "16px",
-          boxShadow: "0 0 20px rgba(0,0,0,0.3)",
-        }}
-      >
+      <Card className="summary-card">
         <CardContent>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: { xs: "column", md: "row" },
-              justifyContent: "space-between",
-              gap: 4,
-            }}
-          >
-            <Box sx={{ flex: 1 }}>
+          <Box className="summary-content-box">
+            <Box className="summary-info">
               <Typography variant="body1">
                 <strong>Total Monthly Costs:</strong> {summary.monthlyCostsSum}{" "}
                 zł
@@ -188,12 +157,12 @@ const SummaryComponent = ({ costs, summary }) => {
               </Typography>
             </Box>
 
-            <Box sx={{ flex: 1, minWidth: 300, height: 300 }}>
+            <Box className="summary-chart">
               <Pie data={data} options={options} />
             </Box>
           </Box>
 
-          <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+          <Box className="summary-advice-btn">
             <button className="monthly-costs-inner-button" onClick={getAdvice}>
               Get a financial advice from Chat GPT
             </button>
@@ -202,23 +171,12 @@ const SummaryComponent = ({ costs, summary }) => {
           {adviceLoading && <div className="loader"></div>}
 
           {adviceError && (
-            <div style={{ color: "red", marginTop: "10px" }}>
-              Error: {adviceError}
-            </div>
+            <div className="summary-error">Error: {adviceError}</div>
           )}
 
           {adviceText && (
-            <Box
-              sx={{
-                mt: 4,
-                p: 2,
-                backgroundColor: "rgba(255,255,255,0.05)",
-                borderRadius: "8px",
-              }}
-            >
-              <h3 style={{ color: "#FFDF88", fontWeight: "bold" }}>
-                Financial Advice:
-              </h3>
+            <Box className="summary-advice-box">
+              <h3 className="summary-advice-title">Financial Advice:</h3>
               <p>{adviceText}</p>
             </Box>
           )}

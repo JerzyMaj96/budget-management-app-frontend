@@ -16,9 +16,7 @@ const AnalysisPage = () => {
   const baseUrl = `http://localhost:8080/budget-management/users/${userId}/monthly_costs`;
 
   useEffect(() => {
-    if (!userId || month == null) {
-      return;
-    }
+    if (!userId || month == null) return;
 
     const runCalculations = async () => {
       try {
@@ -56,9 +54,7 @@ const AnalysisPage = () => {
         const response = await axios.get(`${baseUrl}/monthly_costs_summary`, {
           params: { month },
         });
-        if (!response.data) {
-          throw new Error("Failed to fetch summary");
-        }
+        if (!response.data) throw new Error("Failed to fetch summary");
 
         const summaryData = response.data;
 
@@ -90,17 +86,12 @@ const AnalysisPage = () => {
     runCalculations();
   }, [userId, month, baseUrl]);
 
-  if (isLoading) {
-    return <div className="loader"></div>;
-  }
+  if (isLoading) return <div className="loader"></div>;
 
-  if (error) {
-    return <div style={{ color: "red" }}>Error: {error}</div>;
-  }
+  if (error) return <div className="error-text">Error: {error}</div>;
 
-  if (!costsSummary || !selectedCosts) {
-    return <div>Waiting for data...</div>;
-  }
+  if (!costsSummary || !selectedCosts)
+    return <div className="loading-text">Waiting for data...</div>;
 
   const extendedCosts = {
     ...selectedCosts,

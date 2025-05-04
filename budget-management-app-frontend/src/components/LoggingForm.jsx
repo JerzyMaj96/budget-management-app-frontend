@@ -19,16 +19,19 @@ function LoggingForm(props) {
   }
 
   return (
-    <form onSubmit={handleLogin}>
+    <form onSubmit={handleLogin} className="form">
       <input
         onChange={handleChange}
         name="userId"
         placeholder="User ID"
         value={userId}
+        className="form-input"
       />
-      <button type="submit">Log in</button>
-      <p onClick={handleCreate} style={{ cursor: "pointer" }}>
-        I am not a user yet !
+      <button type="submit" className="form-button">
+        Log in
+      </button>
+      <p onClick={handleCreate} className="form-link">
+        I am not a user yet!
       </p>
     </form>
   );

@@ -8,9 +8,7 @@ function CreateAccountForm(props) {
 
   function handleChange(event) {
     const { value, name } = event.target;
-    setUser((prevValue) => {
-      return { ...prevValue, [name]: value };
-    });
+    setUser((prevValue) => ({ ...prevValue, [name]: value }));
   }
 
   async function handleUser(event) {
@@ -26,16 +24,15 @@ function CreateAccountForm(props) {
         "http://localhost:8080/budget-management/users",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(newUser),
         }
       );
+
       if (response.ok) {
         const data = await response.json();
         alert(
-          "Your user account has been successfully created ! Your ID is: " +
+          "Your user account has been successfully created! Your ID is: " +
             data.id
         );
         props.onBackToLogin();
@@ -49,24 +46,25 @@ function CreateAccountForm(props) {
   }
 
   return (
-    <form onSubmit={handleUser}>
+    <form onSubmit={handleUser} className="form">
       <input
         onChange={handleChange}
         name="userName"
-        placeholder="type in user name"
+        placeholder="Type in user name"
         value={user.userName}
+        className="form-input"
       />
       <input
         onChange={handleChange}
         name="netSalary"
-        placeholder="type in your net Salary"
+        placeholder="Type in your net salary"
         value={user.netSalary}
+        className="form-input"
       />
-      <button type="submit">Create User</button>
-      <p
-        onClick={() => props.onBackToLogin(true)}
-        style={{ cursor: "pointer" }}
-      >
+      <button type="submit" className="form-button">
+        Create User
+      </button>
+      <p onClick={() => props.onBackToLogin(true)} className="form-link">
         Back to Login
       </p>
     </form>
