@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Card, CardContent, Typography, Box } from "@mui/material";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { useNavigate } from "react-router-dom";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -9,6 +11,8 @@ const SummaryComponent = ({ costs, summary }) => {
   const [adviceText, setAdviceText] = useState(null);
   const [adviceError, setAdviceError] = useState(null);
   const [adviceLoading, setAdviceLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const labels = ["Rent", "Food", "Electricity", "Gas"];
   const dataValues = [
@@ -105,7 +109,24 @@ const SummaryComponent = ({ costs, summary }) => {
   }
 
   return (
-    <div style={{ margin: "40px auto", maxWidth: "900px" }}>
+    <div
+      style={{
+        margin: "40px auto",
+        maxWidth: "900px",
+        position: "relative",
+        padding: "20px",
+      }}
+    >
+      <KeyboardBackspaceIcon
+        onClick={() => navigate(-1)}
+        style={{
+          position: "absolute",
+          top: 20,
+          left: 20,
+          cursor: "pointer",
+          fontSize: "30px",
+        }}
+      />
       <Typography variant="h4" sx={{ mb: 3 }}>
         Analysis for Monthly Costs ID: {costs.id}
       </Typography>

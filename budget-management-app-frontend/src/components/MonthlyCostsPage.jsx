@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import CreateMonthlyCostsForm from "./MonthlyCostsPage-components/CreateMonthlyCostsForm";
 import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
+import { monthlyCostFields } from "./MonthlyCostsPage-components/fieldMappings";
 import AddBoxIcon from "@mui/icons-material/AddBox";
+import AddIcon from "@mui/icons-material/Add";
 
 function MonthlyCostsPage({ userId }) {
   const [monthlyCostsList, setMonthlyCostsList] = useState([]);
@@ -10,69 +13,74 @@ function MonthlyCostsPage({ userId }) {
   const [loading, setLoading] = useState(true);
   const [isMonthlyCostsForm, setIsMonthlyCostsForm] = useState(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     fetch(
       `http://localhost:8080/budget-management/users/${userId}/monthly_costs/byUserId`
     )
       .then((response) => {
-        if (!response.ok) {
-          throw new Error(
-            "Failed to fetch Monthly Costs! You haven't set any monthly costs yet !"
-          );
-        }
+        if (!response.ok) throw new Error("Failed to fetch Monthly Costs!");
         return response.json();
       })
       .then((data) => {
         setMonthlyCostsList(data);
         setLoading(false);
       })
-      .catch((error) => {
-        setError(error.message);
-
+      .catch((err) => {
+        setError(err.message);
         setLoading(false);
       });
   }, [userId]);
 
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  }
+  const formatDate = (dateString) => format(new Date(dateString), "yyyy-MM-dd");
 
-  function getMonthlyCostsForm(event) {
-    event.preventDefault();
+  const createNewMonthlyCosts = (e) => {
+    e.preventDefault();
     setIsMonthlyCostsForm(true);
-  }
+  };
 
-  function handleGoBack(isFormVisible) {
-    setIsMonthlyCostsForm(isFormVisible);
-  }
+  const updateSingleCostField = (field, newValue) => {
+    const updatedCosts = { ...selectedCosts, [field]: parseFloat(newValue) };
 
-  const navigate = useNavigate();
+    fetch(
+      `http://localhost:8080/budget-management/users/${userId}/monthly_costs`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedCosts),
+      }
+    )
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to update monthly cost.");
+        return res.json();
+      })
+      .then((data) => {
+        const updatedList = monthlyCostsList.map((c) =>
+          c.id === data.id ? data : c
+        );
+        setMonthlyCostsList(updatedList);
+        setSelectedCosts(data);
+        alert("Cost updated!");
+      })
+      .catch(() => alert("Failed to update cost!"));
+  };
 
-  function showAnalysis(event) {
-    event.preventDefault();
+  const showAnalysis = (e) => {
+    e.preventDefault();
     const date = new Date(selectedCosts.createDate);
     const month = date.getMonth() + 1;
     navigate("/analysis", { state: { selectedCosts, userId, month } });
-  }
-
-  function createNewMonthlyCosts(event) {
-    event.preventDefault();
-    setIsMonthlyCostsForm(true);
-  }
+  };
 
   return (
     <div>
-      {loading && <div className="loader"></div>}
+      {loading && <div className="loader" />}
+
       {!isMonthlyCostsForm && error && (
-        <div>
-          <h2 style={{ color: "white", fontWeight: "bold", padding: "20px" }}>
-            {error}
-          </h2>
-          <button onClick={getMonthlyCostsForm} style={{ marginTop: "20 px" }}>
+        <div className="error-message">
+          <h2>{error}</h2>
+          <button onClick={() => setIsMonthlyCostsForm(true)}>
             Create Monthly Costs
           </button>
         </div>
@@ -81,57 +89,33 @@ function MonthlyCostsPage({ userId }) {
       {isMonthlyCostsForm && (
         <CreateMonthlyCostsForm
           userId={userId}
-          onBackToMonthlyCostsPage={handleGoBack}
+          onBackToMonthlyCostsPage={setIsMonthlyCostsForm}
         />
       )}
 
-      {loading && monthlyCostsList.length === 0 && (
-        <p style={{ color: "white" }}>
-          You haven't set any monthly costs yet !
-        </p>
-      )}
-
       {!isMonthlyCostsForm && !loading && monthlyCostsList.length > 0 && (
-        <div>
-          <div
-            style={{
-              position: "relative",
-              width: "100%",
-              padding: "0 40px",
-            }}
-          >
-            <h2 style={{ textAlign: "center" }}>Monthly Costs</h2>
-
-            {monthlyCostsList.length > 0 &&
-              (() => {
-                const lastCost = monthlyCostsList[monthlyCostsList.length - 1];
-                const isSameMonth =
-                  new Date(lastCost.createDate).getMonth() ===
-                    new Date().getMonth() &&
-                  new Date(lastCost.createDate).getFullYear() ===
-                    new Date().getFullYear();
-
-                if (!isSameMonth) {
-                  return (
-                    <AddBoxIcon
-                      onClick={createNewMonthlyCosts}
-                      style={{
-                        position: "absolute",
-                        right: 0,
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        cursor: "pointer",
-                      }}
-                    />
-                  );
-                }
-                return null;
-              })()}
+        <div className="table-container">
+          <div className="table-header">
+            <h2>Monthly Costs</h2>
+            {(() => {
+              const last = monthlyCostsList.at(-1);
+              const now = new Date();
+              const isSameMonth =
+                new Date(last.createDate).getMonth() === now.getMonth() &&
+                new Date(last.createDate).getFullYear() === now.getFullYear();
+              return !isSameMonth ? (
+                <AddBoxIcon
+                  className="add-box-icon"
+                  onClick={createNewMonthlyCosts}
+                />
+              ) : null;
+            })()}
           </div>
+
           <table className="custom-table">
             <thead>
               <tr>
-                <th>Monthly Costs ID</th>
+                <th>ID</th>
                 <th>Created On</th>
               </tr>
             </thead>
@@ -139,6 +123,7 @@ function MonthlyCostsPage({ userId }) {
               {monthlyCostsList.map((cost) => (
                 <tr
                   key={cost.id}
+                  className="cost-row"
                   onClick={() =>
                     setSelectedCosts(
                       selectedCosts && selectedCosts.id === cost.id
@@ -146,7 +131,6 @@ function MonthlyCostsPage({ userId }) {
                         : cost
                     )
                   }
-                  style={{ cursor: "pointer" }}
                 >
                   <td>{cost.id}</td>
                   <td>{formatDate(cost.createDate)}</td>
@@ -160,38 +144,37 @@ function MonthlyCostsPage({ userId }) {
       {!isMonthlyCostsForm && selectedCosts && (
         <div className="details-box">
           <h3>Details for Monthly Costs with ID: {selectedCosts.id}</h3>
-          <ul>
-            <li>Rent: {selectedCosts.rent} zł</li>
-            <li>Food Costs: {selectedCosts.foodCosts} zł</li>
-            <li>Electricity: {selectedCosts.currentElectricityBill} zł</li>
-            <li>Gas: {selectedCosts.currentGasBill} zł</li>
-            <li>
-              Car Service:{" "}
-              {selectedCosts.totalCarServiceCosts === null
-                ? 0
-                : selectedCosts.totalCarServiceCosts}{" "}
-              zł
-            </li>
-            <li>
-              Car Insurance:{" "}
-              {selectedCosts.carInsuranceCosts === null
-                ? 0
-                : selectedCosts.carInsuranceCosts}{" "}
-              zł
-            </li>
-            <li>
-              Car Operation:{" "}
-              {selectedCosts.carOperatingCosts === null
-                ? 0
-                : selectedCosts.carOperatingCosts}{" "}
-              zł
-            </li>
-            <li>Created On : {formatDate(selectedCosts.createDate)}</li>
-          </ul>
+          <div className="cost-fields">
+            {monthlyCostFields.map(({ key, label, defaultValue }, i) => {
+              const value = selectedCosts[key] ?? defaultValue ?? 0;
+              return (
+                <div key={i} className="cost-field">
+                  <span>
+                    {label}: {value} zł
+                  </span>
+                  <AddIcon
+                    titleAccess={`Add something to "${label}"`}
+                    className="add-icon"
+                    onClick={() => {
+                      const newValue = prompt(
+                        `Enter new value for ${label}:`,
+                        value
+                      );
+                      if (newValue !== null && !isNaN(newValue)) {
+                        updateSingleCostField(key, newValue);
+                      }
+                    }}
+                  />
+                </div>
+              );
+            })}
+            <div className="cost-field">
+              <span>Created On: {formatDate(selectedCosts.createDate)}</span>
+            </div>
+          </div>
           <button className="monthly-costs-inner-button" onClick={showAnalysis}>
             Show analysis
           </button>
-          <button className="monthly-costs-inner-button">Make changes</button>
         </div>
       )}
     </div>
