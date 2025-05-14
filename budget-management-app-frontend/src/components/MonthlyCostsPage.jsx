@@ -35,8 +35,8 @@ function MonthlyCostsPage({ userId }) {
 
   const formatDate = (dateString) => format(new Date(dateString), "yyyy-MM-dd");
 
-  const createNewMonthlyCosts = (e) => {
-    e.preventDefault();
+  const createNewMonthlyCosts = (event) => {
+    event.preventDefault();
     setIsMonthlyCostsForm(true);
   };
 
@@ -51,13 +51,13 @@ function MonthlyCostsPage({ userId }) {
         body: JSON.stringify(updatedCosts),
       }
     )
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to update monthly cost.");
-        return res.json();
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to update monthly cost.");
+        return response.json();
       })
       .then((data) => {
-        const updatedList = monthlyCostsList.map((c) =>
-          c.id === data.id ? data : c
+        const updatedList = monthlyCostsList.map((cost) =>
+          cost.id === data.id ? data : cost
         );
         setMonthlyCostsList(updatedList);
         setSelectedCosts(data);
@@ -66,8 +66,8 @@ function MonthlyCostsPage({ userId }) {
       .catch(() => alert("Failed to update cost!"));
   };
 
-  const showAnalysis = (e) => {
-    e.preventDefault();
+  const showAnalysis = (event) => {
+    event.preventDefault();
     const date = new Date(selectedCosts.createDate);
     const month = date.getMonth() + 1;
     navigate("/analysis", { state: { selectedCosts, userId, month } });
