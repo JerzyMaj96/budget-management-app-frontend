@@ -27,3 +27,12 @@ npm install
 
 # 3. Run development server
 npm run dev
+```
+By default, the frontend will be available at:
+http://localhost:5173
+
+Configuration
+
+Create a .env file in the project root and set the API URL:
+
+VITE_API_URL=http://localhost:8080
