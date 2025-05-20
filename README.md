@@ -25,5 +25,5 @@ cd budget-management-app-frontend
 # 2. Install dependencies
 npm install
 
-# 3. Run developer application
+# 3. Run development server
 npm run dev
