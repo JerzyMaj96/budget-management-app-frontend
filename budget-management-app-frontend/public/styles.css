@@ -73,7 +73,7 @@ button {
   cursor: pointer;
 }
 /* 
---------------------------------------------------- FOR MONTHLYCOSTS PAGE */
+--------------------------------------------------- FOR MONTHLY COSTS PAGE */
 
 .custom-table {
   width: 100%;
@@ -238,7 +238,7 @@ button:active,
   margin-top: 20px;
 }
 
-/* --------------------------------------------------------- Summary Componet */
+/* --------------------------------------------------------- Summary Component */
 
 .summary-container {
   margin: 40px auto;

@@ -10,7 +10,7 @@ function App() {
   const [userIsCreated, setUserIsCreated] = useState(true);
   const [userId, setUserId] = useState(null);
 
-  function createUser() {
+  function setUser() {
     setUserIsCreated(false);
   }
 
@@ -31,7 +31,7 @@ function App() {
               ) : userIsCreated ? (
                 <div>
                   <h1>Hello ! </h1>
-                  <LoggingForm onLogin={handleLogin} onCreate={createUser} />
+                  <LoggingForm onLogin={handleLogin} onCreate={setUser} />
                 </div>
               ) : (
                 <CreateAccountForm
